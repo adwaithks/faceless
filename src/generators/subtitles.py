@@ -1,6 +1,7 @@
 import pysrt
 from src.constants import SUBTITLE_DIR
 
+
 def create_subtitles(script, audio_durations):
     output_file = SUBTITLE_DIR + "subtitles.srt"
     subs = pysrt.SubRipFile()
@@ -23,3 +24,11 @@ def create_subtitles(script, audio_durations):
     subs.save(output_file)
     return output_file
 
+
+def generate_subtitles_from_script(script):
+    subtitles = []
+    for text in script:
+        sentence = text.split(". ")
+        for line in sentence:
+            subtitles.append(line)
+    return subtitles

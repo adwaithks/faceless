@@ -1,8 +1,30 @@
-from src.generators.audio import trim_audio, generate_audio, get_audio_duration, merge_audio_files
-from src.generators.subtitles import create_subtitles
-from src.generators.image import create_video_from_image, generate_image, get_images_duration_in_video
-from src.generators.video import add_background_music, merge_videos, burn_subtitle_to_video, generate_vide_wo_bg_music
-from src.constants import OUTPUT_DIR, AUDIO_DIR, IMAGE_DIR, VIDEO_DIR, SUBTITLE_DIR, OTHER_DIR
+from src.generators.audio import (
+    trim_audio,
+    generate_audio,
+    get_audio_duration,
+    merge_audio_files,
+)
+from src.generators.subtitles import create_subtitles, generate_subtitles_from_script
+from src.generators.image import (
+    create_video_from_image,
+    generate_image,
+    get_images_duration_in_video,
+)
+from src.generators.video import (
+    add_background_music,
+    merge_videos,
+    burn_subtitle_to_video,
+    generate_vide_wo_bg_music,
+)
+from src.constants import (
+    OUTPUT_DIR,
+    AUDIO_DIR,
+    IMAGE_DIR,
+    VIDEO_DIR,
+    SUBTITLE_DIR,
+    OTHER_DIR,
+    ASSETS_DIR,
+)
 from dotenv import load_dotenv
 from openai import OpenAI
 import requests
@@ -17,24 +39,17 @@ import shutil
 
 load_dotenv()
 
-subtitles = [
-    "the streets never lie.",
-    "each thread holds the weight of a thousand nights.",
-]
-script = [
-    "the streets never lie. each thread holds the weight of a thousand nights.",
-]
-
 
 def create_openai_client():
-    api_key = os.getenv('OPENAI_API_KEY')
+    api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         raise ValueError("OPENAI_API_KEY not found in environment variables")
     return OpenAI(api_key=api_key)
 
+
 def create_directories():
     directories = [AUDIO_DIR, IMAGE_DIR, VIDEO_DIR, SUBTITLE_DIR, OTHER_DIR]
-    
+
     if os.path.exists(OUTPUT_DIR):
         shutil.rmtree(OUTPUT_DIR)
     os.makedirs(OUTPUT_DIR)
@@ -44,8 +59,28 @@ def create_directories():
             shutil.rmtree(directory)
         os.makedirs(directory)
 
+
+def get_script_and_subtitles():
+    script_path = ASSETS_DIR + "script.txt"
+    subtitle_path = ASSETS_DIR + "subtitles.txt"
+    with open(script_path, "r") as script:
+        script_lines = [
+            line.strip().lower() for line in script.readlines() if line.strip()
+        ]
+
+    with open(subtitle_path, "r") as subtitles:
+        subtitles = [
+            line.strip().lower() for line in subtitles.readlines() if line.strip()
+        ]
+
+    return [script_lines, subtitles]
+
+
 def main():
     client = create_openai_client()
+    [script, subtitles] = get_script_and_subtitles()
+    print(script)
+    print(subtitles)
     create_directories()
 
     audio_durations = []
@@ -78,18 +113,18 @@ def main():
 
     subtitled_video_path = burn_subtitle_to_video(merged_video_path, subtitle_path)
 
-    final_out_wo_music = generate_vide_wo_bg_music(subtitled_video_path, merged_audio_path)
+    final_out_wo_music = generate_vide_wo_bg_music(
+        subtitled_video_path, merged_audio_path
+    )
 
     start_time = input("Enter the start time (HH:MM:SS): ")
-    background_music_path = input("Enter the path to the background music file: ")
     duration = sum(audio_durations)
 
-    trimmed_audio = trim_audio(background_music_path, start_time, duration)
+    trimmed_audio = trim_audio(start_time, duration)
 
     final_out_w_music = add_background_music(final_out_wo_music, trimmed_audio)
 
     print(f"Final video created successfully! Check the {final_out_w_music} file.")
-
 
 
 if __name__ == "__main__":

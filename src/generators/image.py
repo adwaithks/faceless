@@ -3,6 +3,7 @@ from pathlib import Path
 import requests
 from src.constants import IMAGE_DIR, VIDEO_DIR
 
+
 def generate_image(text, index, script, client):
     script_str = "".join(script)
     prompt = f"""story: {script_str}. Now Generate an image that resonates with the sentence: '{text}'. The image should be realistic and look very close to real day to day life."""
@@ -38,22 +39,22 @@ def create_video_from_image(image_path, duration, index=1):
 
 
 def get_images_duration_in_video(script, subtitles, audio_durations):
-        subtitle_index = 0
-        script_index = 0
-        duration = 0
-        prev_duration = 0
-        image_durations_in_video = []
+    subtitle_index = 0
+    script_index = 0
+    duration = 0
+    prev_duration = 0
+    image_durations_in_video = []
 
-        while subtitle_index < len(subtitles) and script_index < len(script):
-            if subtitles[subtitle_index].lower() in script[script_index].lower():
-                duration += audio_durations[subtitle_index]
-                subtitle_index += 1
-            else:
-                image_durations_in_video.append(duration)
-                duration = 0
-                script_index += 1
-
-        if duration > 0:
+    while subtitle_index < len(subtitles) and script_index < len(script):
+        if subtitles[subtitle_index].lower() in script[script_index].lower():
+            duration += audio_durations[subtitle_index]
+            subtitle_index += 1
+        else:
             image_durations_in_video.append(duration)
+            duration = 0
+            script_index += 1
 
-        return image_durations_in_video
+    if duration > 0:
+        image_durations_in_video.append(duration)
+
+    return image_durations_in_video
