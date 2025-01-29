@@ -16,14 +16,11 @@ def merge_videos(video_paths):
     with open(file_list, "w") as f:
         for path in video_paths:
             f.write(f"file '../../{path}'\n")
-    try:
-        command = f"""ffmpeg -f concat -safe 0 -i {file_list} -c copy -v debug -y {output_file}"""
-        subprocess.run(command, shell=True, check=True)
-        print(f"Videos merged successfully. Saved to {output_file}")
-        return output_file
-    except Exception as e:
-        print(e)
-        raise "err"
+    command = (
+        f"""ffmpeg -f concat -safe 0 -i {file_list} -c copy -v debug -y {output_file}"""
+    )
+    subprocess.run(command, shell=True, check=True)
+    return output_file
 
 
 def generate_vide_wo_bg_music(subtitled_video, merged_audio):

@@ -79,8 +79,6 @@ def get_script_and_subtitles():
 def main():
     client = create_openai_client()
     [script, subtitles] = get_script_and_subtitles()
-    print(script)
-    print(subtitles)
     create_directories()
 
     audio_durations = []
