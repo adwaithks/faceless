@@ -7,7 +7,9 @@ Faceless is a project that generates a video from a given script and subtitles. 
 This is an example video that was generated using this script:
 (video duration has been trimmed down to upload to github. Original duration: 1min+)
 
-[![Demo Video](./demo/thumbnail.png)](./demo/final.mp4)
+<a href="./demo/final.mp4">
+    <img src="./demo/thumbnail.png" alt="Demo Video" width="300" />
+</a>
 
 ## Installation
 
