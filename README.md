@@ -24,7 +24,7 @@ This is an example video that was generated using this script:
 2. Clone the repository:
 
     ```sh
-    git clone https://github.com/yourusername/faceless.git
+    git clone https://github.com/adwaithks/faceless.git
     cd faceless
     ```
 
@@ -64,6 +64,18 @@ This is an example video that was generated using this script:
 3. Follow the prompts to add background music and generate the final video.
 
 4. Output video will be in `output/videos/final_video_with_music.mp4`
+
+## Plans
+
+1. Generate script and subtitles using LLM (Currently you have to write it to `/assets/script.txt` and `/assets/subtitles.txt` respectively).
+
+2. Highlight words in the subtitles as they occur in the audio
+
+3. Generate different images for each section (Currently there is no way to generate images other than what was generated during the whole process)
+
+4. Ability to add video clips instead of images or both.
+
+5. Web UI for making everything easy.
 
 ## Directory Structure
 
